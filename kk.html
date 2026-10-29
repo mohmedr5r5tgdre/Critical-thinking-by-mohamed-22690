@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Critical Thinking Questions Bank - By Mohamed Atef</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            background-attachment: fixed;
+            color: #f8fafc;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.25s ease;
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar">
+
+    <!-- Header -->
+    <header class="glass-nav sticky top-0 z-50 p-4 shadow-lg">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="bg-indigo-600/80 text-white font-extrabold px-3 py-1.5 rounded-xl border border-indigo-400/30 text-sm shadow-md">
+                    MAT117
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-black text-white tracking-wide">Critical Thinking Questions Bank</h1>
+                    <p class="text-xs text-indigo-300 font-medium">By Mohamed Atef</p>
+                </div>
+            </div>
+            
+            <div id="timer-box" class="hidden flex items-center bg-amber-500/10 border border-amber-500/30 px-3.5 py-1.5 rounded-xl backdrop-blur-md">
+                <svg class="w-5 h-5 text-amber-400 ml-2 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span id="timer" class="font-mono text-lg font-bold text-amber-300">10:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-5xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center">
+
+        <!-- Lecture & Set Selection Screen -->
+        <div id="selection-screen" class="space-y-8 py-4">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 via-white to-purple-200">
+                    اختر مجموعة الأسئلة للاختبار
+                </h2>
+                <p class="text-slate-300 text-sm md:text-base">إجمالي 203 سؤال مقسمة على 4 محاضرات حسب الفصول والدروس</p>
+            </div>
+
+            <!-- Lectures Wrapper -->
+            <div id="lectures-container" class="space-y-6">
+                <!-- Lecture cards will be injected dynamically -->
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden space-y-6 my-auto">
+            <!-- Progress Bar & Details -->
+            <div class="glass-card rounded-xl p-4 space-y-3">
+                <div class="flex justify-between items-center text-sm font-bold text-slate-200">
+                    <span id="quiz-title" class="text-indigo-300">المحاضرة 1 - المجموعة 1</span>
+                    <span id="question-progress" class="bg-indigo-900/50 px-3 py-1 rounded-lg border border-indigo-500/30">السؤال 1 من 10</span>
+                </div>
+                <div class="w-full bg-slate-900/80 h-3 rounded-full overflow-hidden p-0.5 border border-slate-700">
+                    <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-full rounded-full transition-all duration-300 w-0"></div>
+                </div>
+            </div>
+
+            <!-- Question Box -->
+            <div class="glass-card rounded-2xl p-6 md:p-8 space-y-6">
+                <div class="space-y-3" dir="ltr">
+                    <span id="question-number-badge" class="inline-block text-xs font-extrabold bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 px-2.5 py-1 rounded-md">Question 1</span>
+                    <h3 id="question-text" class="text-lg md:text-xl font-bold text-white leading-relaxed"></h3>
+                </div>
+
+                <div id="options-container" class="space-y-3" dir="ltr">
+                    <!-- Options injected here -->
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div class="flex justify-between items-center">
+                <button id="prev-btn" onclick="prevQuestion()" class="glass-btn px-6 py-2.5 rounded-xl font-bold text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed">
+                    السابق
+                </button>
+                <button id="next-btn" onclick="nextQuestion()" class="px-8 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-black shadow-lg shadow-indigo-600/30 transition transform hover:-translate-y-0.5">
+                    التالي
+                </button>
+            </div>
+        </div>
+
+        <!-- Results & Review Screen -->
+        <div id="results-screen" class="hidden space-y-8 my-auto py-6">
+            <div class="glass-card rounded-2xl p-6 md:p-10 text-center space-y-6">
+                <div class="inline-flex items-center justify-center w-28 h-28 rounded-full bg-gradient-to-tr from-indigo-600/30 to-purple-600/30 border-2 border-indigo-400/50 shadow-inner">
+                    <span id="score-percent" class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 to-purple-200">0%</span>
+                </div>
+                
+                <div class="space-y-2">
+                    <h3 class="text-2xl font-black text-white">انتهى الاختبار!</h3>
+                    <p id="score-details" class="text-slate-300 text-lg font-medium"></p>
+                </div>
+
+                <div class="pt-2 flex flex-wrap justify-center gap-4">
+                    <button onclick="showResultsReview()" class="glass-btn px-6 py-3 rounded-xl font-bold text-indigo-300 hover:text-white">
+                        مراجعة الأسئلة والإجابات
+                    </button>
+                    <button onclick="backToSelection()" class="px-7 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black shadow-lg shadow-indigo-600/30 transition">
+                        اختيار مجموعة أخرى
+                    </button>
+                </div>
+            </div>
+
+            <!-- Answers Detailed Review -->
+            <div id="review-container" class="hidden space-y-4">
+                <h3 class="text-xl font-black text-white border-r-4 border-indigo-500 pr-3 my-4">مراجعة الإجابات التفصيلية:</h3>
+                <div id="review-list" class="space-y-4"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-nav py-4 text-center text-xs text-slate-400 border-t border-slate-800">
+        <p>Critical Thinking MAT117 - Questions Bank Solution</p>
+        <p class="font-bold text-indigo-300 mt-1">Prepared & Designed by Mohamed Atef</p>
+    </footer>
+
+    <script>
+        // RAW QUESTIONS DATA DIRECTLY FROM THE PDF (203 Questions in total)
+        const lecturesData = [
+            {
+                lectureTitle: "Lecture 1: Definition and Concepts",
+                sets: [
+                    // Set 1 (10 Questions)
+                    [
+                        { q: "Which of the following is NOT a characteristic of a critical thinker?", options: ["A) They are open-minded and consider different perspectives.", "B) They rely solely on their emotions when making decisions.", "C) They identify and analyze assumptions behind arguments.", "D) They are willing to revise their opinions based on new evidence."], ans: 1 },
+                        { q: "What is the main goal of critical thinking?", options: ["A) To memorize information quickly and efficiently.", "B) To reach valid conclusions and make informed decisions.", "C) To accept information at face value without questioning it.", "D) To build strong emotional responses to arguments."], ans: 1 },
+                        { q: "Which of the following best describes the process of critical thinking?", options: ["A) Accepting the first answer that comes to mind.", "B) Carefully evaluating information and evidence.", "C) Ignoring any information that contradicts your existing beliefs.", "D) Making decisions based on personal biases."], ans: 1 },
+                        { q: "When evaluating information, a critical thinker should consider:", options: ["A) The source of the information and its credibility.", "B) Whether the information aligns with their existing beliefs.", "C) Only the most recent information, regardless of its source.", "D) Primarily the emotional impact of the information."], ans: 0 },
+                        { q: "What is the core definition of critical thinking?", options: ["A) Memorizing facts for exams", "B) Emotional decision making", "C) Following the opinions of others", "D) The ability to analyze facts objectively and form a judgment"], ans: 3 },
+                        { q: "Critical thinking allows us to perform what more effectively?", options: ["A) Speed reading", "B) Public speaking", "C) Problem solving and decision making", "D) Social networking"], ans: 2 },
+                        { q: "Which of these is NOT a primary critical thinking skill?", options: ["A) Analysis", "B) Evaluation", "C) Intuition", "D) Inference"], ans: 2 },
+                        { q: "In the elements of thought, 'Information' refers to:", options: ["A) The data and evidence we have", "B) Personal opinions", "C) Guesses about the future", "D) Hidden agendas"], ans: 0 },
+                        { q: "Why is defining 'Purpose' important in thinking?", options: ["A) To see who is in charge", "B) To find a point of view", "C) To make the question longer", "D) To understand why we want the answer"], ans: 3 },
+                        { q: "'Assumptions' are defined as things we:", options: ["A) Prove with evidence", "B) Take for granted without questioning", "C) Share with everyone", "D) Use to reach a conclusion"], ans: 1 }
+                    ],
+                    // Set 2 (10 Questions)
+                    [
+                        { q: "What does 'Point of View' represent in thinking?", options: ["A) The only right way to look at something", "B) Where you stand to look at a question", "C) A bias that cannot be changed", "D) The conclusion of an argument"], ans: 1 },
+                        { q: "'Inferences' are the:", options: ["A) Data we collect", "B) Conclusions we are drawing", "C) Questions we ask", "D) Concepts we learn"], ans: 1 },
+                        { q: "'Consequences' help us understand the:", options: ["A) History of the problem", "B) Implications of our question", "C) Evidence needed", "D) Personal limitations"], ans: 1 },
+                        { q: "Critical thinkers see problems as:", options: ["A) Annoyances to be avoided", "B) Exciting challenges", "C) Things that require immediate feelings", "D) Personal attacks"], ans: 1 },
+                        { q: "Which trait describes a critical thinker?", options: ["A) Pretending to know everything", "B) Being skeptical of extreme views", "C) Judging on first impressions", "D) Following intuition only"], ans: 1 },
+                        { q: "Uncritical thinkers tend to be:", options: ["A) Patient", "B) Skeptical of their own opinions", "C) Guided by feelings rather than reason", "D) Open-minded"], ans: 2 },
+                        { q: "Critical thinkers handle their own limitations by:", options: ["A) Ignoring them", "B) Acknowledging them", "C) Hiding them from others", "D) Pretending they don't exist"], ans: 1 },
+                        { q: "What is the goal of a critical thinker?", options: ["A) Winning an argument", "B) Understanding", "C) Being the loudest in the room", "D) Finding flaws in others"], ans: 1 },
+                        { q: "Which is the first step in the critical thinking process?", options: ["A) Explore", "B) Identify the problem", "C) Evaluate", "D) Reach a conclusion"], ans: 1 },
+                        { q: "During the 'Explore' phase, you should:", options: ["A) Collect information only", "B) Uncover assumptions and biases", "C) Assess explanations", "D) Stop thinking"], ans: 1 }
+                    ],
+                    // Set 3 (14 Questions)
+                    [
+                        { q: "The 'Evaluate' phase involves:", options: ["A) Brainstorming only", "B) Assessing explanations or solutions", "C) Ignoring evidence", "D) Keeping an open mind without judging"], ans: 1 },
+                        { q: "In career choosing, critical thinking helps to:", options: ["A) Follow your friends' choices", "B) Avoid making any choice", "C) Choose the highest-paying job immediately", "D) Weigh positives and negatives accurately"], ans: 3 },
+                        { q: "What should be used to make judgments?", options: ["A) Emotions", "B) Evidence", "C) Intuition", "D) Rumors"], ans: 1 },
+                        { q: "Uncritical thinkers often focus on:", options: ["A) Others' ideas", "B) Their own opinions", "C) Rational evidence", "D) Universal truths"], ans: 1 },
+                        { q: "The 'Concepts' element of thought refers to:", options: ["A) The physical data", "B) The ideas involved", "C) The final judgment", "D) The hidden bias"], ans: 1 },
+                        { q: "In the 'Identify' stage, you should:", options: ["A) Reach a conclusion", "B) Collect information", "C) Brainstorm", "D) Assess solutions"], ans: 1 },
+                        { q: "'Interpretation' happens during which phase?", options: ["A) Identify", "B) Explore", "C) Evaluate", "D) Finish"], ans: 1 },
+                        { q: "A critical thinker thinks before:", options: ["A) Acting", "B) Learning", "C) Observing", "D) Asking"], ans: 0 },
+                        { q: "'Pros and cons' analysis is specifically recommended for:", options: ["A) Financial planning", "B) Career choosing", "C) Insurance selection", "D) All of the above"], ans: 3 },
+                        { q: "What should one understand about individuals when choosing a career?", options: ["A) Everyone is the same", "B) Beliefs, desires, and ambitions differ for everyone", "C) Friends always know what is best", "D) Personal ambitions don't matter"], ans: 1 },
+                        { q: "'Question' in thinking focuses on:", options: ["A) Who is asking", "B) What is being asked", "C) The answer itself", "D) Why we are asking"], ans: 1 },
+                        { q: "Being 'Rational' means:", options: ["A) Thinking based on reason or logic", "B) Thinking quickly", "C) Thinking about yourself", "D) Thinking without evidence"], ans: 0 },
+                        { q: "Case Study 1: By being honest about his lack of knowledge and asking for resources, Sameh is demonstrating a key trait of a:", options: ["A) Uncritical Thinker", "B) Critical Thinker", "C) Emotional Decision Maker", "D) Passive Learner"], ans: 1 },
+                        { q: "Case Study 2: In which part of the EEE process did Sarah brainstorm alternative explanations and solutions?", options: ["A) Examine", "B) Explore", "C) Evaluate", "D) Execute"], ans: 1 }
+                    ]
+                ]
+            },
+            {
+                lectureTitle: "Lecture 2: Asking the Right Questions",
+                sets: [
+                    // Set 1 (10 Questions)
+                    [
+                        { q: "Case Study 3: Why did Omar use critical thinking to choose Graphic Design over Engineering?", options: ["A) To prove his friends were wrong about Engineering.", "B) Because Graphic Design is objectively better for everyone.", "C) To weigh the pros and cons based on his own unique ambitions.", "D) Because he was guided by his feelings rather than his thoughts."], ans: 2 },
+                        { q: "Case Study 4: Layla's decision to ignore her initial excitement and look for evidence is an example of:", options: ["A) Avoiding emotionalism and thinking before acting.", "B) Judging on first impressions and intuition.", "C) Being an uncritical thinker.", "D) Focusing only on her own opinion."], ans: 0 },
+                        { q: "Which Socratic question is best for identifying the hidden foundations of a person's belief?", options: ["A. 'What is your favorite part of this idea?'", "B. 'What are you taking for granted right now?'", "C. 'When did you first hear this?'", "D. 'Who else agrees with you?'"], ans: 1 },
+                        { q: "A 'Question of Judgment' is defined as a question that:", options: ["A. Has only one correct, verifiable answer", "B. Is purely a matter of personal favorite color", "C. Has better or worse answers based on reasoning and evidence", "D. Cannot be answered by a human"], ans: 2 },
+                        { q: "Which question helps you explore different points of view?", options: ["A. 'What is the boiling point of water?'", "B. 'How would someone who disagrees with me see this evidence?'", "C. 'What is the date today?'", "D. 'Can you define that term?'"], ans: 1 },
+                        { q: "Using Socratic questioning to find 'inconsistencies in our logic' is:", options: ["A. Truth Focused", "B. Preference Focused", "C. Bias Focused", "D. Feeling Focused"], ans: 0 },
+                        { q: "Why are questions called the 'engine' of thinking?", options: ["A) They provide final answers", "B) They keep the mind active and moving forward", "C) They stop the thinking process", "D) They are only for experts"], ans: 1 },
+                        { q: "Answers often represent what in the thought process?", options: ["A) Forward motion", "B) A full stop", "C) Deep inquiry", "D) A new beginning"], ans: 1 },
+                        { q: "Socratic Questioning is best described as:", options: ["A) Random questioning", "B) Avoiding the truth", "C) Asking yes/no questions", "D) Systematic and deep inquiry"], ans: 3 },
+                        { q: "Which questions are most powerful for finding underlying causes?", options: ["A) Who and When", "B) Why and How", "C) What and Where", "D) Which and Whom"], ans: 1 }
+                    ],
+                    // Set 2 (10 Questions)
+                    [
+                        { q: "Open-ended questions are useful because they:", options: ["A) Can be answered with 'Yes' or 'No'", "B) Are easier to answer", "C) Provoke serious thinking and full explanations", "D) Have only one right answer"], ans: 2 },
+                        { q: "What characterizes a 'Fact' question?", options: ["A) It has one correct answer verifiable by data", "B) It has many correct answers", "C) It is based on personal feelings", "D) It has no right or wrong answer"], ans: 0 },
+                        { q: "Questions of 'Preference' are based on:", options: ["A) Scientific data", "B) Subjective opinion", "C) Logical reasoning", "D) Universal evidence"], ans: 1 },
+                        { q: "'Judgment' questions have:", options: ["A) No right answer", "B) Better or worse answers based on reasoning", "C) Only one correct answer like facts", "D) Only emotional answers"], ans: 1 },
+                        { q: "The goal of 'Clarification' questions is to:", options: ["A) Win the debate", "B) Ensure everyone understands the same terms", "C) Confuse the opponent", "D) Change the subject"], ans: 1 },
+                        { q: "'What do you mean by that term?' is a question of:", options: ["A) Purpose", "B) Clarification", "C) Fact", "D) Implication"], ans: 1 },
+                        { q: "Questioning 'Purpose' acts as a:", options: ["A) Roadblock", "B) Compass for our thinking", "C) Distraction", "D) Final conclusion"], ans: 1 },
+                        { q: "Muddled and ineffective thinking often results from:", options: ["A) Not being clear about your goal/purpose", "B) Asking too many questions", "C) Using logic", "D) Seeking primary sources"], ans: 0 },
+                        { q: "When evaluating information, you should always check the:", options: ["A) Origin/Primary source", "B) Social media likes", "C) Length of the article", "D) Font used"], ans: 0 },
+                        { q: "A critical rule for information is:", options: ["A) Trust everything you read online", "B) Never take information at face value", "C) Believe experts without proof", "D) Assume the author is right"], ans: 1 }
+                    ],
+                    // Set 3 (12 Questions)
+                    [
+                        { q: "Identifying 'Assumptions' reveals the:", options: ["A) Future results", "B) Hidden foundations of beliefs", "C) Final answers", "D) Purpose of the task"], ans: 1 },
+                        { q: "Which question tests for assumptions?", options: ["A) 'What is the date today'?", "B) 'How much does this cost'?", "C) 'What is my favorite color'?", "D) 'What am I taking for granted right now'?"], ans: 3 },
+                        { q: "If we accept a claim as true, we must ask:", options: ["A) 'Who said it'?", "B) 'What else must also be true'?", "C) 'Is it easy to believe'?", "D) 'Will others like it'?"], ans: 1 },
+                        { q: "Exploring different 'Points of View' prevents:", options: ["A) One-sided thinking", "B) Logic", "C) Understanding", "D) Accuracy"], ans: 0 },
+                        { q: "To expand your perspective, you should ask:", options: ["A) 'How would someone who disagrees with me see this'?", "B) 'How can I prove I am right'?", "C) 'Why is my view the best'?", "D) 'Who agrees with me'?"], ans: 0 },
+                        { q: "What is 'The Trap' in thinking?", options: ["A) Asking too many 'Why' questions", "B) Using Socratic questioning", "C) Seeking different perspectives", "D) Being trapped in your own viewpoint"], ans: 3 },
+                        { q: "Data or evidence is used to verify questions of:", options: ["A) Preference", "B) Fact", "C) Judgment", "D) Emotion"], ans: 1 },
+                        { q: "'Is this policy fair?' is a question of:", options: ["A) Fact", "B) Judgment", "C) Preference", "D) Purpose"], ans: 1 },
+                        { q: "Entering other viewpoints in 'good faith' means:", options: ["A) Pretending to listen", "B) Trying to understand the logic behind them", "C) Finding ways to mock them", "D) Changing your mind immediately"], ans: 1 },
+                        { q: "Which are the primary investigation tools (5W's + 1H)?", options: ["A) Who, What, Where, When, Why, How", "B) Which, Whom, Whose, Whether, Why, Where", "C) Why, How, When, Which, Where, What", "D) Who, What, Which, When, Why, How"], ans: 0 },
+                        { q: "Thinking like an expert means:", options: ["A) Knowing all the answers", "B) Asking the same questions experts ask", "C) Ignoring basic questions", "D) Having a degree"], ans: 1 },
+                        { q: "Case Study 5: The counselor is helping Yahya by asking a:", options: ["A) Question of Fact", "B) Question of Preference", "C) Question of Purpose", "D) Question of Perspective"], ans: 2 }
+                    ]
+                ]
+            },
+            {
+                lectureTitle: "Lecture 3: Logic and the Structure of Arguments",
+                sets: [
+                    // Set 1 (10 Questions)
+                    [
+                        { q: "The process of examining the parts of thinking is called:", options: ["A. Evaluation", "B. Analysis", "C. Memorization", "D. Reflection"], ans: 1 },
+                        { q: "Finding strengths and weaknesses in thinking is called:", options: ["A. Evaluation", "B. Observation", "C. Prediction", "D. Description"], ans: 0 },
+                        { q: "The part of critical thinking that makes thinking better is:", options: ["A. Classification", "B. Improvement", "C. Observation", "D. Explanation"], ans: 1 },
+                        { q: "A question with one correct answer is a question of:", options: ["A. Preference", "B. Judgment", "C. Fact", "D. Emotion"], ans: 2 },
+                        { q: "A question based on personal taste is a question of:", options: ["A. Fact", "B. Preference", "C. Logic", "D. Evidence"], ans: 1 },
+                        { q: "A question that requires reasoning and evidence is a question of:", options: ["A. Fact", "B. Preference", "C. Judgment", "D. Memory"], ans: 2 },
+                        { q: "Questions beginning with 'Why' and 'How' mainly encourage:", options: ["A. Memorization", "B. Deep analysis", "C. Guessing", "D. Copying"], ans: 1 },
+                        { q: "Questions used to make sure everyone understands the same meaning are:", options: ["A. Judgment questions", "B. Clarification questions", "C. Preference questions", "D. Recall questions"], ans: 1 },
+                        { q: "Asking, 'What exactly am I trying to achieve?' focuses on your:", options: ["A. Assumption", "B. Purpose", "C. Evidence", "D. Conclusion"], ans: 1 },
+                        { q: "Checking whether information comes from a trustworthy source focuses on:", options: ["A. Curiosity", "B. Reliability", "C. Imagination", "D. Creativity"], ans: 1 }
+                    ],
+                    // Set 2 (10 Questions)
+                    [
+                        { q: "A belief accepted without questioning is called a(n):", options: ["A. Assumption", "B. Observation", "C. Conclusion", "D. Fact"], ans: 0 },
+                        { q: "Thinking about the possible results of an idea focuses on:", options: ["A. Concepts", "B. Implications", "C. Feelings", "D. Preferences"], ans: 1 },
+                        { q: "Looking at an issue from different perspectives helps avoid:", options: ["A. Accuracy", "B. One-sided thinking", "C. Curiosity", "D. Precision"], ans: 1 },
+                        { q: "The first step in understanding another person's idea is:", options: ["A. Criticism", "B. Clarification", "C. Evaluation", "D. Memorization"], ans: 1 },
+                        { q: "The questions 'What do you mean?' and 'Can you explain?' are examples of:", options: ["A. Clarification questions", "B. Preference questions", "C. Fact questions", "D. Judgment questions"], ans: 0 },
+                        { q: "A question that checks whether evidence is trustworthy examines:", options: ["A. Reliability", "B. Imagination", "C. Preference", "D. Emotion"], ans: 0 },
+                        { q: "The statement 'What am I taking for granted?' examines:", options: ["A. Purpose", "B. Assumptions", "C. Evidence", "D. Conclusions"], ans: 1 },
+                        { q: "The statement 'How would someone else view this issue?' examines:", options: ["A. Point of view", "B. Emotion", "C. Memory", "D. Description"], ans: 0 },
+                        { q: "Breaking a difficult question into smaller questions is a feature of:", options: ["A. Socratic questioning", "B. Memorization", "C. Guessing", "D. Observation"], ans: 0 },
+                        { q: "In logic, an argument is:", options: ["A. A loud disagreement", "B. A structured piece of reasoning", "C. A personal opinion", "D. A debate winner"], ans: 1 }
+                    ],
+                    // Set 3 (10 Questions)
+                    [
+                        { q: "The main claim an argument tries to prove is the:", options: ["A. Premise", "B. Evidence", "C. Conclusion", "D. Assumption"], ans: 2 },
+                        { q: "The reasons that support a conclusion are called:", options: ["A. Judgments", "B. Premises", "C. Opinions", "D. Assumptions"], ans: 1 },
+                        { q: "Reasoning in which true premises guarantee a true conclusion is:", options: ["A. Inductive reasoning", "B. Deductive reasoning", "C. Circular reasoning", "D. Emotional reasoning"], ans: 1 },
+                        { q: "Reasoning that reaches a probable conclusion from patterns is:", options: ["A. Deductive reasoning", "B. Inductive reasoning", "C. Symbolic reasoning", "D. Personal reasoning"], ans: 1 },
+                        { q: "An argument with a correct logical structure is:", options: ["A. Sound", "B. Valid", "C. Weak", "D. False"], ans: 1 },
+                        { q: "A valid argument with true premises is:", options: ["A. Biased", "B. Sound", "C. Emotional", "D. Unclear"], ans: 1 },
+                        { q: "Attacking a person's character instead of the argument is:", options: ["A. Straw Man", "B. Ad Hominem", "C. Slippery Slope", "D. Hasty Generalization"], ans: 1 },
+                        { q: "Misrepresenting another person's view to make it easier to attack is:", options: ["A. Ad Hominem", "B. Straw Man", "C. Circular Reasoning", "D. False Cause"], ans: 1 },
+                        { q: "Claiming that one small action will certainly cause a series of disasters is:", options: ["A. Straw Man", "B. Slippery Slope", "C. Ad Hominem", "D. Appeal to Emotion"], ans: 1 },
+                        { q: "Making a broad conclusion from too few examples is:", options: ["A. Hasty Generalization", "B. Deductive Reasoning", "C. Valid Reasoning", "D. Clarification"], ans: 0 }
+                    ],
+                    // Set 4 (10 Questions)
+                    [
+                        { q: "Giving clear and relevant reasons to support a claim demonstrates:", options: ["A. Strong argumentation", "B. Personal preference", "C. Emotional thinking", "D. Memorization"], ans: 0 },
+                        { q: "The quality that requires stating your claim clearly is:", options: ["A. Clarity", "B. Curiosity", "C. Preference", "D. Tolerance"], ans: 0 },
+                        { q: "The quality that requires providing facts and reasons is:", options: ["A. Breadth", "B. Evidence", "C. Feeling", "D. Curiosity"], ans: 1 },
+                        { q: "The quality that requires the conclusion to follow from the reasons is:", options: ["A. Logic", "B. Memory", "C. Preference", "D. Opinion"], ans: 0 },
+                        { q: "Which checklist item helps you avoid errors in reasoning?", options: ["A. Have I avoided fallacies?", "B. Have I memorized enough facts?", "C. Have I written a long answer?", "D. Have I used difficult vocabulary?"], ans: 0 },
+                        { q: "A deductive argument is one where:", options: ["A) The conclusion is likely true, but not guaranteed.", "B) The premises are true, and the conclusion necessarily follows.", "C) The argument relies on personal opinions and beliefs.", "D) The conclusion is completely unrelated to the premises."], ans: 1 },
+                        { q: "Critical thinking involves:", options: ["A) Accepting information without question.", "B) Analyzing information for validity and bias.", "C) Relying solely on personal experiences.", "D) Jumping to conclusions quickly."], ans: 1 },
+                        { q: "Which of the following is an example of critical thinking?", options: ["A) Someone tells you sugar is bad for you, so you avoid it completely.", "B) You hear a news report and question the source before accepting it as fact.", "C) You see someone crying and immediately assume they are sad.", "D) You believe everything your friends tell you without considering other viewpoints."], ans: 1 },
+                        { q: "Deductive reasoning is most often used in:", options: ["A) Literature analysis", "B) Scientific experiments", "C) Persuasive essays", "D) Political debates"], ans: 1 },
+                        { q: "Which of the following is NOT a key characteristic of a strong deductive argument?", options: ["A) The premises are true.", "B) The conclusion logically follows from the premises.", "C) The argument considers alternative explanations.", "D) The conclusion is specific and limited."], ans: 2 }
+                    ],
+                    // Set 5 (10 Questions)
+                    [
+                        { q: "Critical thinking is a valuable skill because it helps you:", options: ["A) Win arguments easily.", "B) Form your own informed opinions.", "C) Spread rumors and misinformation.", "D) Make decisions based on emotions."], ans: 1 },
+                        { q: "What is the term for the statements that lead to the conclusion in a deductive argument?", options: ["A) Assumptions", "B) Biases", "C) Premises", "D) Opinions"], ans: 2 },
+                        { q: "'If we allow students to use one AI tool, they will eventually stop thinking entirely and the education system will collapse.' This is a:", options: ["A) Straw Man", "B) Slippery Slope", "C) Ad Hominem", "D) Deductive Proof"], ans: 1 },
+                        { q: "'All mammals breathe air. A whale is a mammal. Therefore, a whale breathes air.' This is an example of:", options: ["A. Inductive Reasoning", "B. Deductive Reasoning", "C. A Logical Fallacy", "D. The Halo Effect"], ans: 1 },
+                        { q: "'Don't listen to Dr. Smith's health advice; he is overweight.' This is which fallacy?", options: ["A. Straw Man", "B. Ad Hominem", "C. Slippery Slope", "D. Hasty Generalization"], ans: 1 },
+                        { q: "'The sun has risen every day so far; therefore, it will likely rise tomorrow.' This is:", options: ["A. Deductive Reasoning", "B. Inductive Reasoning", "C. A Slippery Slope", "D. An Ad Hominem"], ans: 1 },
+                        { q: "'My opponent wants to improve public parks. He clearly wants to waste all our tax money on grass!' This is:", options: ["A. A Straw Man", "B. A Slippery Slope", "C. A Valid Argument", "D. A Primary Source"], ans: 0 },
+                        { q: "A 'Sound Argument' must have:", options: ["A. Only a valid structure", "B. Only true premises", "C. A valid structure AND true premises", "D. No conclusion"], ans: 2 },
+                        { q: "'I met two rude people from that city, so everyone there must be rude.' This is:", options: ["A. A Hasty Generalization", "B. A Slippery Slope", "C. An Ad Hominem", "D. A Valid Deduction"], ans: 0 },
+                        { q: "In logic, an 'argument' is:", options: ["A) A fight or disagreement", "B) An emotional outburst", "C) A structured piece of reasoning", "D) A collection of facts without a point"], ans: 2 }
+                    ],
+                    // Set 6 (10 Questions)
+                    [
+                        { q: "'Premises' are defined as:", options: ["A) The final point of an argument", "B) The opposite point of view", "C) The person making the argument", "D) Reasons or evidence given to support a claim"], ans: 3 },
+                        { q: "The 'Conclusion' is:", options: ["A) A piece of evidence", "B) The main claim the premises are trying to prove", "C) A logical fallacy", "D) The start of the argument"], ans: 1 },
+                        { q: "Deductive reasoning leads to:", options: ["A) Probability", "B) Absolute certainty", "C) Generalizations", "D) Guesses"], ans: 1 },
+                        { q: "In a valid deductive argument, if the premises are true:", options: ["A) The conclusion must be true", "B) The conclusion might be true", "C) The conclusion is likely false", "D) The conclusion is irrelevant"], ans: 0 },
+                        { q: "Inductive reasoning deals with:", options: ["A) Mathematical certainty", "B) Probability and patterns", "C) Absolute truths", "D) Formal proofs"], ans: 1 },
+                        { q: "Inductive conclusions are:", options: ["A) 100% certain", "B) Likely or probable", "C) Always false", "D) Formal laws"], ans: 1 },
+                        { q: "The example 'The sun will rise tomorrow' is an example of:", options: ["A) Deduction", "B) Induction", "C) A fallacy", "D) A premise"], ans: 1 },
+                        { q: "'Validity' in logic refers to the:", options: ["A) Truth of the premises", "B) Structure of the argument", "C) Person speaking", "D) Emotional impact"], ans: 1 },
+                        { q: "A 'Sound' argument must have:", options: ["A) Only a valid structure", "B) Only true premises", "C) Valid structure AND true premises", "D) Many premises"], ans: 2 },
+                        { q: "Logical Fallacies are:", options: ["A) Valid structures", "B) Mistakes or 'tricks' in logic", "C) True conclusions", "D) Scientific laws"], ans: 1 }
+                    ],
+                    // Set 7 (10 Questions)
+                    [
+                        { q: "The 'Ad Hominem' fallacy involves:", options: ["A) Misrepresenting an argument", "B) Attacking the person instead of the argument", "C) Using too much evidence", "D) Predicting a chain reaction"], ans: 1 },
+                        { q: "Why is Ad Hominem a logical error?", options: ["A) Characters are always honest", "B) The character of a person is irrelevant to the truth of their argument", "C) It is too polite", "D) It uses too many facts"], ans: 1 },
+                        { q: "The 'Straw Man' fallacy involves:", options: ["A) Attacking a person's character", "B) Misrepresenting an opponent's view to make it easier to attack", "C) Drawing a conclusion from a small sample", "D) Predicting a disaster"], ans: 1 },
+                        { q: "A 'Slippery Slope' fallacy claims that:", options: ["A) One small step will inevitably lead to a chain of disastrous events", "B) Most people are rudeness", "C) Arguments are like straw", "D) Only experts should speak"], ans: 0 },
+                        { q: "The error in a Slippery Slope is:", options: ["A) Providing too much evidence", "B) Using valid logic", "C) Assuming a chain reaction will happen without evidence for each step", "D) Attacking the opponent"], ans: 2 },
+                        { q: "'Hasty Generalization' occurs when:", options: ["A) A conclusion is drawn from too little evidence", "B) An argument is valid but not sound", "C) A person is attacked", "D) A chain reaction is predicted"], ans: 0 },
+                        { q: "Logical reasoning for a general claim requires:", options: ["A) One specific example", "B) A representative sample size", "C) An emotional story", "D) A famous author"], ans: 1 },
+                        { q: "'All men are mortal. Socrates is a man. Therefore, Socrates is mortal' is:", options: ["A) Inductive", "B) Deductive", "C) A fallacy", "D) A straw man"], ans: 1 },
+                        { q: "An argument that is valid but has false premises is:", options: ["A) Sound", "B) Not sound", "C) A fallacy", "D) Inductive"], ans: 1 },
+                        { q: "What is the first step in building your own argument?", options: ["A) Clarity", "B) Evidence", "C) Logic", "D) Avoiding people"], ans: 0 }
+                    ],
+                    // Set 8 (7 Questions)
+                    [
+                        { q: "Formal logic is used in:", options: ["A) Everyday gossip", "B) Mathematics and formal scientific proofs", "C) Political advertisements", "D) Grocery shopping"], ans: 1 },
+                        { q: "Most scientific discovery is based on:", options: ["A) Deduction", "B) Induction", "C) Fallacies", "D) Intuition"], ans: 1 },
+                        { q: "A 'Straw Man' makes an opponent's position look:", options: ["A) Strong and intimidating", "B) Complex", "C) Logical and sound", "D) Weak or ridiculous"], ans: 3 },
+                        { q: "Identifying fallacies acts as a:", options: ["A) Barrier to thinking", "B) Way to ignore facts", "C) Shield against being deceived by bad logic", "D) Method for attacking people"], ans: 2 },
+                        { q: "'I met two rude people from that city, so everyone there is rude' is a:", options: ["A) Ad Hominem", "B) Hasty Generalization", "C) Slippery Slope", "D) Straw Man"], ans: 1 },
+                        { q: "Case Study 6: Candidate B has committed which logical fallacy?", options: ["A) Straw Man", "B) Ad Hominem", "C) Hasty Generalization", "D) Inductive Probability"], ans: 1 },
+                        { q: "Case Study 7: The spokesperson is using which logical fallacy?", options: ["A) Straw Man", "B) Ad Hominem", "C) Deductive Logic", "D) Hasty Generalization"], ans: 0 }
+                    ]
+                ]
+            },
+            {
+                lectureTitle: "Lecture 4: Cognitive Biases and Mental Shortcuts",
+                sets: [
+                    // Set 1 (10 Questions)
+                    [
+                        { q: "What are heuristics primarily defined as in the context of cognitive psychology and critical thinking?", options: ["A) Slow, deliberate analytical calculations", "B) Mental 'rules of thumb' that simplify decision-making and save brain energy", "C) Faulty logical structures derived exclusively from biased news media", "D) Unconscious emotional responses that completely prevent problem-solving"], ans: 1 },
+                        { q: "Which cognitive bias occurs when individuals actively search only for information that agrees with their preexisting beliefs while ignoring opposing evidence?", options: ["A) Anchoring Bias", "B) The Halo Effect", "C) Confirmation Bias", "D) The Dunning-Kruger Effect"], ans: 2 },
+                        { q: "Case Example: A political commentator on social media exclusively reads and shares posts reinforcing their own partisan views, while blocking or dismissing all counterarguments. This behavior best exemplifies:", options: ["A) Availability Heuristic", "B) Confirmation Bias within echo chambers", "C) Sunk Cost Fallacy", "D) Lateral Reading failure"], ans: 1 },
+                        { q: "How does the availability heuristic influence human judgment and risk assessment?", options: ["A) By relying on statistical data gathered over decades", "B) By judging probability based on how easily examples come to mind due to vividness or recent news", "C) By anchoring calculations to the very first numerical value encountered", "D) By assuming attractive individuals possess superior competence across all domains"], ans: 1 },
+                        { q: "Case Example: Many people express intense fear of plane crashes because dramatic coverage in media, ignoring the statistical reality that car accidents kill far more people annually. This is a clear manifestation of:", options: ["A) The Availability Heuristic", "B) In-Group Bias", "C) The Dunning-Kruger Effect", "D) Currency evaluation failure"], ans: 0 },
+                        { q: "What psychological mechanism defines the anchoring bias?", options: ["A) The tendency to judge a person's entire character based on a single positive trait", "B) Being overly influenced by the first piece of information or number encountered, making subsequent adjustment difficult", "C) Continuing a failing project because past investments cannot be recovered", "D) Overestimating one's competence due to a lack of foundational knowledge"], ans: 1 },
+                        { q: "Case Example: A retail tag reads: 'Was $100, Now $50.' A shopper perceives $50 as an incredible bargain, even though the item is realistically worth only $20. The $100 price tag acted as a:", options: ["A) Authority marker", "B) Anchor", "C) Sunk cost", "D) Peer-review standard"], ans: 1 },
+                        { q: "What core phenomenon characterizes the Dunning-Kruger Effect?", options: ["A) Experts always overestimate their abilities compared to beginners", "B) People with low ability in a task severely overestimate their competence because they lack the skill to recognize their own errors", "C) Individuals favor members of their own social group over outsiders", "D) Information older than 10 years is automatically deemed inaccurate"], ans: 1 },
+                        { q: "Case Example: A student reads a single blog post claiming a specific vitamin instantly cures common colds and becomes fully convinced they know more than medical researchers. This overconfidence stems from:", options: ["A) The Halo Effect", "B) The Knowledge Gap in the Dunning-Kruger Effect", "C) Vertical reading error", "D) Anchoring bias"], ans: 1 },
+                        { q: "What is the core fallacy behind the 'Sunk Cost Fallacy'?", options: ["A) Believing past investments that cannot be recovered should dictate future decisions", "B) Assuming attractive people are smarter and more capable", "C) Evaluating a source's credibility based solely on its domain extension (.edu vs .com)", "D) Relying exclusively on vertical reading without checking external tabs"], ans: 0 }
+                    ],
+                    // Set 2 (10 Questions)
+                    [
+                        { q: "Case Example: An individual sits through an entire 3-hour movie that they are thoroughly hating, simply because they bought an expensive ticket. This decision illustrates:", options: ["A) In-Group Bias", "B) Sunk Cost Fallacy", "C) Availability Heuristic", "D) Information Literacy"], ans: 1 },
+                        { q: "What psychological effect does the 'Halo Effect' describe?", options: ["A) The tendency to prefer individuals who share your nationality or sports allegiance", "B) Allowing one positive trait (e.g., physical attractiveness or politeness) to influence overall judgment of a person's character or competence", "C) The cognitive relief felt when finding information that confirms preexisting beliefs", "D) The speed advantage of System 1 fast thinking"], ans: 1 },
+                        { q: "Case Example: An employer assumes a job candidate who is well-dressed and polite must also be an exceptionally talented manager, without reviewing any actual management metrics. This is an example of:", options: ["A) The Halo Effect", "B) Anchoring Bias", "C) Sunk Cost Fallacy", "D) Currency evaluation"], ans: 0 },
+                        { q: "What does 'In-Group Bias' involve in human decision-making?", options: ["A) Natural favoritism toward members of one's own group (e.g., nationality, religion, sports teams) and potential unfairness toward outsiders", "B) Overestimating personal competence due to a narrow knowledge gap", "C) Trusting a source solely because its URL ends in .gov", "D) Relying on fast, automatic System 1 thinking for complex mathematical proofs"], ans: 0 },
+                        { q: "What is the primary role of 'Metacognition' in overcoming cognitive biases?", options: ["A) Speeding up intuitive decision-making without conscious reflection", "B) 'Thinking about thinking' to observe one's own mind, catch biases, and question first impressions", "C) Outsourcing complex analysis to automated algorithms", "D) Memorizing primary source documents without critical evaluation"], ans: 1 },
+                        { q: "A manager says, 'We must keep funding this project because we've already spent $1 million on it,' despite no current progress. This is the:", options: ["A. Confirmation Bias", "B. Sunk Cost Fallacy", "C. Anchoring Bias", "D. Hasty Generalization"], ans: 1 },
+                        { q: "A person reads only news sites that agree with their political views and ignores all others. This is an example of:", options: ["A. Availability Heuristic", "B. Confirmation Bias", "C. The Dunning-Kruger Effect", "D. Information Literacy"], ans: 1 },
+                        { q: "A beginner at chess thinks they are much better than they actually are because they don't yet understand the game's complexity. This is:", options: ["A. The Halo Effect", "B. The Dunning-Kruger Effect", "C. Anchoring Bias", "D. Intellectual Autonomy"], ans: 1 },
+                        { q: "An 'anchor' in decision making is:", options: ["A. The final decision made", "B. The first piece of information that influences all future judgments", "C. A way to stop thinking", "D. A logical fallacy involving character attacks"], ans: 1 },
+                        { q: "If you are 'thinking about your own thinking process' to catch biases, you are practicing:", options: ["A. Heuristics", "B. Metacognition", "C. Inductive logic", "D. Information literacy"], ans: 1 }
+                    ],
+                    // Set 3 (10 Questions)
+                    [
+                        { q: "The Availability Heuristic causes people to:", options: ["A. Overestimate the importance of recent, vivid news", "B. Look for evidence that proves them wrong", "C. Always make the most logical choice", "D. Invest more money into failing projects"], ans: 0 },
+                        { q: "What are 'Heuristics?'", options: ["A) Logical proofs", "B) Mental 'rules of thumb' or shortcuts", "C) Scientific laws", "D) Emotional reactions"], ans: 1 },
+                        { q: "While heuristics simplify life, they can lead to:", options: ["A) Perfect logic", "B) Predictable errors in judgment (biases)", "C) Absolute certainty", "D) Slower thinking"], ans: 1 },
+                        { q: "Confirmation Bias involves:", options: ["A) Seeking information that only supports our existing beliefs", "B) Seeking information that contradicts our beliefs", "C) Ignoring all information", "D) Changing our minds often"], ans: 0 },
+                        { q: "The 'Availability Heuristic' causes us to judge probability based on:", options: ["A) Statistical data", "B) Expert advice", "C) Logical deductions", "D) How easily we can remember examples"], ans: 3 },
+                        { q: "People often fear plane crashes more than car accidents due to:", options: ["A) Car accidents being rarer", "B) Statistics proving planes are more dangerous", "C) The vividness and ease of recall of plane crashes", "D) Personal experience"], ans: 2 },
+                        { q: "'Anchoring Bias' means we are overly influenced by:", options: ["A) The final result", "B) The first piece of information we hear", "C) Statistics", "D) Our friends' opinions"], ans: 1 },
+                        { q: "The Dunning-Kruger Effect describes why:", options: ["A) Experts are always confident", "B) Beginners are always right", "C) Knowledge makes you more arrogant", "D) The least skilled often overestimate their competence"], ans: 3 },
+                        { q: "According to the Dunning-Kruger effect, as people learn more:", options: ["A) Their confidence only goes up", "B) They become uncritical", "C) Their confidence often drops before it rises again", "D) They ignore their errors"], ans: 2 },
+                        { q: "The 'Sunk Cost Fallacy' is the trap of:", options: ["A) Continuing an effort just because of past investment", "B) Saving money for the future", "C) Investing in new technology", "D) Giving up too early"], ans: 0 }
+                    ],
+                    // Set 4 (10 Questions)
+                    [
+                        { q: "Decisions should be based on:", options: ["A) Past investments", "B) Future costs and benefits", "C) How much you have already suffered", "D) What others are doing"], ans: 1 },
+                        { q: "The 'Halo Effect' occurs when:", options: ["A) We dislike everyone", "B) One positive trait influences our overall judgment of a person", "C) We use logic to judge someone", "D) We ignore a person's appearance"], ans: 1 },
+                        { q: "In-Group Bias is the tendency to:", options: ["A) Treat everyone equally", "B) Favor people who are like us", "C) Dislike our own team", "D) Be objective in all situations"], ans: 1 },
+                        { q: "'Fast' thinking is:", options: ["A) Deliberate analysis", "B) Automatic and intuitive", "C) Always correct", "D) Critical thinking"], ans: 1 },
+                        { q: "To overcome biases, critical thinkers should:", options: ["A) Speed up their thinking", "B) Slow down and seek counter-evidence", "C) Trust their first impressions", "D) Ignore opposing viewpoints"], ans: 1 },
+                        { q: "'Metacognition' is defined as:", options: ["A) Thinking about others", "B) Thinking about your own thinking process", "C) Ignoring your thoughts", "D) Memorizing complex data"], ans: 1 },
+                        { q: "Why does metacognition matter?", options: ["A) It helps catch biases before they affect decisions", "B) It helps you win debates", "C) it makes you think faster", "D) It is only for psychologists"], ans: 0 },
+                        { q: "Confirmation bias makes us feel:", options: ["A) Wrong and confused", "B) 'Right,' but prevents us from seeing the full truth", "C) Logical and objective", "D) Skeptical of our own beliefs"], ans: 1 },
+                        { q: "The 'Anchor' in anchoring bias becomes the:", options: ["A) Conclusion", "B) Starting point for future judgments", "C) Only piece of evidence", "D) Correct price"], ans: 1 },
+                        { q: "If a $100 shirt is marked down to $50, the $100 is the:", options: ["A) Sunk cost", "B) Anchor", "C) Heuristic", "D) Fact"], ans: 1 }
+                    ],
+                    // Set 5 (10 Questions)
+                    [
+                        { q: "True experts are often:", options: ["A) More cautious than beginners", "B) Arrogant", "C) Unaware of their errors", "D) Always 100% certain"], ans: 0 },
+                        { q: "The paradox of knowledge states: 'The more you know'...", options: ["A) '...the more you know'.", "B) '...the more you realize how much you don't know'.", "C) '...the less you need to think'.", "D) '...the more biases you have'."], ans: 1 },
+                        { q: "Finishing a terrible movie just because you watched half is an example of:", options: ["A) Halo effect", "B) Sunk cost fallacy", "C) Confirmation bias", "D) Logic"], ans: 1 },
+                        { q: "Assuming an attractive person is also smart is an example of:", options: ["A) In-group bias", "B) Halo effect", "C) Dunning-Kruger", "D) Anchoring"], ans: 1 },
+                        { q: "In-group bias can affect our:", options: ["A) Memory", "B) Objectivity and treatment of others", "C) Eye color", "D) Deductive skills"], ans: 1 },
+                        { q: "Heuristics are useful because they:", options: ["A) Are always accurate", "B) Help make quick decisions without using too much energy", "C) Eliminate all bias", "D) Require deep analysis"], ans: 1 },
+                        { q: "Which of these is a strategy to manage bias?", options: ["A) Awareness", "B) Trusting intuition", "C) Fast action", "D) Avoiding counter-evidence"], ans: 0 },
+                        { q: "'Why do I believe this?' is a question used in:", options: ["A) Inductive logic", "B) Metacognition", "C) Anchoring", "D) Fast thinking"], ans: 1 },
+                        { q: "The 'Out-Group' effect can lead to:", options: ["A) Fairness", "B) Unfair treatment or negative assumptions", "C) Better decision-making", "D) Logic"], ans: 1 },
+                        { q: "People with low ability lack the skill needed to:", options: ["A) Speak loudly", "B) Recognize their own errors", "C) Use shortcuts", "D) Feel confident"], ans: 1 }
+                    ],
+                    // Set 6 (10 Questions)
+                    [
+                        { q: "Cognitive biases are described as:", options: ["A) Clear windows", "B) Hidden filters of the mind", "C) Scientific formulas", "D) Universal truths"], ans: 1 },
+                        { q: "Case Study 8: The $2,000 price functioned as:", options: ["A) An Anchor", "B) A Sunk Cost", "C) A Confirmation", "D) A Heuristic"], ans: 0 },
+                        { q: "Case Study 9: Sami is falling into the trap of:", options: ["A) Confirmation Bias", "B) The Sunk Cost Fallacy", "C) The Halo Effect", "D) Metacognition"], ans: 1 },
+                        { q: "What happens if terms are not clarified in a debate?", options: ["A) People reach an agreement faster", "B) People 'talk past each other'", "C) Thinking becomes clearer", "D) Facts become preferences"], ans: 1 },
+                        { q: "One-sided thinking leads to:", options: ["A) Deep understanding", "B) Biased conclusions", "C) Logical certainty", "D) Truth"], ans: 1 },
+                        { q: "Socratic questioning is primarily focused on:", options: ["A) Winning arguments", "B) Finding the reality underneath the surface", "C) Memorizing history", "D) Following popularity"], ans: 1 },
+                        { q: "'If we accept a claim as true, what else must also be true?' tests for:", options: ["A) Implications", "B) Definitions", "C) Preferences", "D) History"], ans: 0 },
+                        { q: "Deductive reasoning moves from:", options: ["A) Specific to General", "B) General principles to Specific conclusions", "C) Emotions to Logic", "D) Guesses to Evidence"], ans: 1 },
+                        { q: "Inductive reasoning moves from:", options: ["A) Specific observations to General conclusions", "B) General rules to Specific details", "C) False premises to Sound logic", "D) Intuition to Certainty"], ans: 0 },
+                        { q: "Which tool is best for metacognitive self-reflection?", options: ["A) Asking 'What assumptions am I making?'", "B) Memorizing answers", "C) Ignoring mistakes", "D) Speeding up decisions"], ans: 0 }
+                    ]
+                ]
+            }
+        ];
+
+        let currentLecIdx = 0;
+        let currentSetIdx = 0;
+        let currentQuestions = [];
+        let userAnswers = [];
+        let timerInterval = null;
+        let timeLeft = 600;
+
+        function initApp() {
+            const container = document.getElementById('lectures-container');
+            container.innerHTML = '';
+
+            lecturesData.forEach((lec, lIdx) => {
+                const lecCard = document.createElement('div');
+                lecCard.className = "glass-card rounded-2xl p-5 md:p-6 space-y-4";
+
+                let setsHTML = '';
+                lec.sets.forEach((set, sIdx) => {
+                    const qCount = set.length;
+                    setsHTML += `
+                        <button onclick="startQuiz(${lIdx}, ${sIdx})" class="glass-btn text-right p-4 rounded-xl flex justify-between items-center group w-full">
+                            <div>
+                                <h4 class="font-bold text-white group-hover:text-indigo-300 transition">المجموعة ${sIdx + 1}</h4>
+                                <span class="text-xs text-slate-400">${qCount} أسئلة • 10 دقائق</span>
+                            </div>
+                            <div class="bg-indigo-600/30 text-indigo-300 p-2 rounded-lg border border-indigo-400/30 group-hover:bg-indigo-600 group-hover:text-white transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </div>
+                        </button>
+                    `;
+                });
+
+                lecCard.innerHTML = `
+                    <div class="border-b border-slate-700/60 pb-3 flex justify-between items-center">
+                        <h3 class="text-lg md:text-xl font-black text-indigo-200">${lec.lectureTitle}</h3>
+                        <span class="text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-1 rounded-full">${lec.sets.length} مجموعات</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        ${setsHTML}
+                    </div>
+                `;
+                container.appendChild(lecCard);
+            });
+        }
+
+        function startQuiz(lecIdx, setIdx) {
+            currentLecIdx = lecIdx;
+            currentSetIdx = setIdx;
+            currentQuestions = lecturesData[lecIdx].sets[setIdx];
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuestions.length).fill(null);
+
+            document.getElementById('selection-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('timer-box').classList.remove('hidden');
+
+            document.getElementById('quiz-title').innerText = `${lecturesData[lecIdx].lectureTitle} - المجموعة ${setIdx + 1}`;
+
+            startTimer(600);
+            renderQuestion();
+        }
+
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            timeLeft = seconds;
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            document.getElementById('timer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function renderQuestion() {
+            const q = currentQuestions[currentQuestionIndex];
+            document.getElementById('question-progress').innerText = `السؤال ${currentQuestionIndex + 1} من ${currentQuestions.length}`;
+            document.getElementById('question-number-badge').innerText = `Question ${currentQuestionIndex + 1}`;
+            document.getElementById('progress-bar').style.width = `${((currentQuestionIndex + 1) / currentQuestions.length) * 100}%`;
+            document.getElementById('question-text').innerText = q.q;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const isSelected = userAnswers[currentQuestionIndex] === idx;
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-4 rounded-xl border transition flex items-start space-x-3 ${
+                    isSelected 
+                        ? 'bg-indigo-600/30 border-indigo-400 text-white font-bold shadow-lg shadow-indigo-600/20' 
+                        : 'glass-btn text-slate-200'
+                }`;
+                btn.onclick = () => selectOption(idx);
+                btn.innerHTML = `
+                    <span class="flex-grow leading-relaxed">${opt}</span>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-btn').innerText = (currentQuestionIndex === currentQuestions.length - 1) ? 'إنهاء الاختبار' : 'التالي';
+        }
+
+        function selectOption(idx) {
+            userAnswers[currentQuestionIndex] = idx;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            document.getElementById('timer-box').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+
+            let correctCount = 0;
+            currentQuestions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.ans) correctCount++;
+            });
+
+            const percent = Math.round((correctCount / currentQuestions.length) * 100);
+            document.getElementById('score-percent').innerText = `${percent}%`;
+            document.getElementById('score-details').innerText = `أجبت بشكل صحيح على ${correctCount} من إجمالي ${currentQuestions.length} أسئلة`;
+        }
+
+        function showResultsReview() {
+            const container = document.getElementById('review-container');
+            const list = document.getElementById('review-list');
+            container.classList.remove('hidden');
+            list.innerHTML = '';
+
+            currentQuestions.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                const isCorrect = userAns === q.ans;
+
+                const item = document.createElement('div');
+                item.className = `glass-card p-5 rounded-xl border ${isCorrect ? 'border-emerald-500/40 bg-emerald-950/20' : 'border-rose-500/40 bg-rose-950/20'} space-y-3`;
+
+                item.innerHTML = `
+                    <div class="flex justify-between items-start" dir="ltr">
+                        <span class="text-xs font-bold text-slate-400">Q${idx + 1}</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-bold ${isCorrect ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'}">
+                            ${isCorrect ? 'إجابة صحيحة ✓' : 'إجابة خاطئة ✗'}
+                        </span>
+                    </div>
+                    <p class="font-bold text-white leading-relaxed" dir="ltr">${q.q}</p>
+                    <div class="space-y-1 text-sm" dir="ltr">
+                        <p class="${isCorrect ? 'text-emerald-300 font-semibold' : 'text-rose-300 font-semibold'}">
+                            إجابتك: ${userAns !== null ? q.options[userAns] : 'لم تجب على السؤال'}
+                        </p>
+                        ${!isCorrect ? `<p class="text-emerald-400 font-semibold">الإجابة الصحيحة: ${q.options[q.ans]}</p>` : ''}
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            itemScroll = container.getBoundingClientRect().top + window.scrollY - 100;
+            window.scrollTo({ top: itemScroll, behavior: 'smooth' });
+        }
+
+        function backToSelection() {
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('review-container').classList.add('hidden');
+            document.getElementById('selection-screen').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
+```eof
